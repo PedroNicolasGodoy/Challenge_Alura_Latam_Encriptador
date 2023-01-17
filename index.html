@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+
+        <title>Encriptador</title>
+    </head>
+    <body>
+        <header>
+            <img class ="logoImg" src="Imagen/logo.png">
+        </header>
+        <main>          
+            <section>
+                <div>
+                    <textarea class="leftInput" name="IngMensaje" id="input-texto"cols="70" rows="10" required placeholder="Ingrese el texto para encriptar o desencriptar" autofocus></textarea>   
+                </div>
+                <div>   
+                    <h6 class="lab">Sólo letras minúsculas, sin caracteres especiales</h6>
+                </div>               
+                <div class="btn-left">
+                    <input class="btn" type="button" value="Encriptar" id="msnEncriptar">
+                    <input class="btn" type="button" value="Desencriptar" id="msnDesencriptar">
+                 </div>                
+            </section>          
+            <section class="rigth"> 
+                    <textarea class="rigthInput" name="msg" id="msg" cols="20" rows="10"></textarea>
+                    
+                <div>
+                    <input class="btnC" type="button" value="Copiar" id="btn-copy">
+                </div>                
+            </section>
+        </main>          
+        <footer>
+            <p class="pie">&copy Copyright Pedro Godoy Alura Latam 2023</p>          
+        </footer>
+    </body>
+</html>
+
+<script>
+
+    function validarTexto (texto) {
+        
+        let caracteres = /[~!@#$%^&*()_+|}{[\]\\\/?><:"`;,.áéíóúàèìòù]/g;
+        let mayusculas = /[A-Z]/g;  
+        let vacio="";
+          
+        
+        if(texto.match(mayusculas)||texto.match(caracteres)){
+            alert("No se permiten caracteres acentos ni mayusculas");
+            return true; 
+        }else if(texto==vacio){
+        alert("Ingrese un mensaje para encriptar");
+            return true;
+        }else {
+            return false;
+        }
+    }
+            //LÓGICA DE ENCRIPTACIÓN//
+
+    let btnEncriptar = document.querySelector("#msnEncriptar");
+
+    btnEncriptar.addEventListener("click",function ()  {
+        let textInput = document.querySelector("#input-texto").value;
+        let textoIngresado = textInput;
+        if (validarTexto (textoIngresado) == false) {       
+            let Encriptado = encriptar(textoIngresado);
+            let resultado = document.querySelector("#msg");
+            document.getElementById("msg").style.backgroundImage="none"; //desaparece la imagen al hacer click en el botón//
+            resultado.value = Encriptado;
+            
+        } else {        
+            textInput = "";     
+        
+        }
+                
+    })
+
+    const reglas = { "e":"enter","i":"imes","a":"ai","o":"ober","u":"ufat"};
+
+    function encriptar (textoIngresado) {
+        let Encriptado = "";
+        for (const obj in reglas) {
+            Encriptado = textoIngresado.replaceAll(obj,reglas[obj]);
+            textoIngresado = Encriptado;
+             
+        }
+        
+        return (Encriptado);
+    }
+
+
+    let btnCopiar = document.querySelector("#btn-copy");
+
+    btnCopiar.addEventListener("click",function(){        
+        let Copiado = document.querySelector("#msg").value;
+        navigator.clipboard.writeText(Copiado);
+        document.querySelector("#input-texto").value="";
+        alert("Texto copiado")
+    });
+    
+    let btnDesencriptar = document.querySelector("#msnDesencriptar"); //utilizamos # para llamar el  id del button//
+
+    btnDesencriptar.addEventListener("click", function(){
+        let textoIngresado = document.querySelector("#input-texto").value;
+        let Desencriptado = desencriptar(textoIngresado);
+
+        let resultado = document.querySelector("#msg");
+        resultado.value = Desencriptado;
+    })
+
+
+    function desencriptar (textoIngresado) {
+        let Encriptado = "";
+        for (const obj in reglas) {
+            Encriptado = textoIngresado.replaceAll(reglas[obj],obj);
+            textoIngresado = Encriptado;        
+        }
+        return (Encriptado);
+    }
+    
+</script>
